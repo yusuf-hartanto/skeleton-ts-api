@@ -16,9 +16,9 @@ export default class Transformer {
       counter_like: item?.counter_like,
       counter_comment: item?.counter_comment,
       created_by: item?.created_by,
-      created_date: item?.created_date,
-      modified_by: item?.modified_by,
-      modified_date: item?.modified_date,
+      created_at: item?.created_at,
+      updated_by: item?.updated_by,
+      updated_at: item?.updated_at,
       like: item?.user_like > 0,
       author: {
         resource_id: item?.created_by,

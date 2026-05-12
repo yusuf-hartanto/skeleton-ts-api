@@ -6,14 +6,12 @@ import AppRoleMenu from '../role.menu/role.menu.model';
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export class AppRole extends Model {
-  public role_id!: string;
-  public role_name!: string;
-  public status!: number;
-  public restrict_level_area!: number;
-  public created_by!: string;
-  public created_date!: Date;
-  public modified_by!: string;
-  public modified_date!: Date;
+  declare role_id: string;
+  declare role_name: string;
+  declare status: number;
+  declare restrict_level_area: number;
+  declare created_by: string;
+  declare updated_by: string;
 }
 
 export function initAppRole(sequelize: Sequelize) {
@@ -26,6 +24,7 @@ export function initAppRole(sequelize: Sequelize) {
       },
       role_name: {
         type: DataTypes.STRING,
+        unique: true,
       },
       status: {
         type: DataTypes.TINYINT,
@@ -38,22 +37,14 @@ export function initAppRole(sequelize: Sequelize) {
       created_by: {
         type: DataTypes.STRING,
       },
-      created_date: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
-      modified_by: {
-        type: DataTypes.STRING,
-      },
-      modified_date: {
-        type: DataTypes.DATE,
-      },
     },
     {
       sequelize,
       modelName: 'AppRole',
       tableName: 'app_role',
-      timestamps: false,
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
     }
   );
 

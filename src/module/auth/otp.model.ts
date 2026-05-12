@@ -4,13 +4,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export class AppOtp extends Model {
-  public id!: string;
-  public email!: string;
-  public code!: number;
-  public status!: number;
-  public expired!: Date;
-  public created_date!: Date;
-  public modified_date!: Date;
+  declare id: string;
+  declare email: string;
+  declare code: number;
+  declare status: number;
+  declare expired: Date;
 }
 
 export function initAppOtp(sequelize: Sequelize) {
@@ -36,19 +34,14 @@ export function initAppOtp(sequelize: Sequelize) {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
       },
-      created_date: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
-      modified_date: {
-        type: DataTypes.DATE,
-      },
     },
     {
       sequelize,
       modelName: 'AppOtp',
       tableName: 'app_otp',
-      timestamps: false,
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
     }
   );
 

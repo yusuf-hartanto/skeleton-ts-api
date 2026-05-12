@@ -95,7 +95,7 @@ export default class Controller {
           ...data,
           module_name: req?.body?.module_name.replace(/ /g, ''),
           parent_id: parent_id,
-          modified_by: req?.user?.id,
+          updated_by: req?.user?.id,
         },
         condition: { menu_id: id },
       });
@@ -114,8 +114,8 @@ export default class Controller {
       await repository.update({
         payload: {
           status: 9,
-          modified_by: req?.user?.id,
-          modified_date: date,
+          updated_by: req?.user?.id,
+          updated_at: date,
         },
         condition: { menu_id: id },
       });

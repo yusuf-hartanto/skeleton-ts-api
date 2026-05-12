@@ -11,7 +11,7 @@ export default class Repository {
   public list(data: any) {
     return Model.findAll({
       where: data?.condition,
-      order: [['created_date', 'DESC']],
+      order: [['updated_at', 'DESC']],
     });
   }
 
@@ -21,7 +21,7 @@ export default class Repository {
         ...condition,
         status: { [Op.ne]: 'D' },
       },
-      order: [['created_date', 'DESC']],
+      order: [['updated_at', 'DESC']],
       offset: data?.offset,
       limit: data?.limit,
     };

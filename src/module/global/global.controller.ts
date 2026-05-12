@@ -243,8 +243,8 @@ const generateHtmlPDF = (title: string, details: any) => {
 
 const formatNavigationRole = (data: any) => {
   let result: Array<object> = [];
-  if (data?.dataValues?.role_menu?.length > 0) {
-    result = data?.dataValues?.role_menu.map((rm: any) => rm?.menu);
+  if (data?.getDataValue('role_menu')?.length > 0) {
+    result = data?.getDataValue('role_menu').map((rm: any) => rm?.menu);
   }
   const navigation = nestedChildren(result);
   return navigation;

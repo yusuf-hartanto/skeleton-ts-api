@@ -123,7 +123,16 @@ export const up: Migration = async () => {
       status: 1,
       created_by: resource?.getDataValue('resource_id'),
     },
-  ]);
+  ], {
+    conflictAttributes: ['param_key', 'param_value'],
+    updateOnDuplicate: [
+      'param_key',
+      'param_value',
+      'param_desc',
+      'status',
+      'updated_at'
+    ],
+  });
 };
 
 export const down: Migration = async () => {

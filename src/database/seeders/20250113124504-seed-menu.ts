@@ -23,22 +23,60 @@ export const up: Migration = async () => {
   const resource = await repoResource.detail({ username: 'adminuser' }, '');
 
   for (let i in menus) {
-    const menu = await Model.create({
-      ...menus[i],
-      menu_id: uuidv4(),
-      created_by: resource?.getDataValue('resource_id'),
+    const existMenu = await Model.findOne({
+      where: {
+        menu_name: menus[i]?.menu_name,
+      },
     });
-    const builkInsert = childmenu
-      ?.filter((r) => r?.parent_id == menus[i]?.id)
-      ?.map((r) => {
-        return {
-          ...r,
-          menu_id: uuidv4(),
-          parent_id: menu?.dataValues?.menu_id,
-          created_by: resource?.getDataValue('resource_id'),
-        };
+
+    let parentId = uuidv4();
+    if (!existMenu) {
+      await Model.bulkCreate([{
+        ...menus[i],
+        menu_id: parentId,
+        created_by: resource?.getDataValue('resource_id'),
+      }], {
+        conflictAttributes: ['menu_name'],
+        updateOnDuplicate: [
+          'menu_name',
+          'menu_icon',
+          'module_name',
+          'type_menu',
+          'seq_number',
+          'parent_id',
+          'status',
+          'updated_at'
+        ],
       });
-    await Model.bulkCreate(builkInsert);
+    } else {
+      parentId = existMenu?.getDataValue('menu_id');
+    }
+    
+    const bulkInsert = (childmenu || [])
+        ?.filter((r) => r?.parent_id == menus[i]?.id)
+        ?.map((r) => {
+          return {
+            ...r,
+            menu_id: uuidv4(),
+            parent_id: parentId,
+            created_by: resource?.getDataValue('resource_id'),
+          };
+        });
+    if (bulkInsert.length > 0) {
+      await Model.bulkCreate(bulkInsert, {
+        conflictAttributes: ['menu_name'],
+        updateOnDuplicate: [
+          'menu_name',
+          'menu_icon',
+          'module_name',
+          'type_menu',
+          'seq_number',
+          'parent_id',
+          'status',
+          'updated_at'
+        ],
+      });
+    }
   }
 };
 

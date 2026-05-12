@@ -36,12 +36,27 @@ export const up: Migration = async () => {
       create: 1,
       edit: 1,
       delete: 1,
-      approve: 1,
+      import: 1,
+      export: 1,
       status: 1,
       created_by: resource?.getDataValue('resource_id'),
     });
   }
-  await Model.bulkCreate(bulkInsert);
+  await Model.bulkCreate(bulkInsert, {
+    conflictAttributes: ['role_id', 'menu_id'],
+    updateOnDuplicate: [
+      'role_id',
+      'menu_id',
+      'view',
+      'create',
+      'edit',
+      'delete',
+      'import',
+      'export',
+      'status',
+      'updated_at'
+    ],
+  });
 };
 
 export const down: Migration = async () => {

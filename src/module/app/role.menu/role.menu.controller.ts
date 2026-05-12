@@ -53,7 +53,8 @@ export default class Controller {
         create: number;
         edit: number;
         delete: number;
-        approve: number;
+        import: number;
+        export: number;
         status: string;
       }
       const date: string = helper.date();
@@ -75,10 +76,11 @@ export default class Controller {
             create: i?.create,
             edit: i?.edit,
             delete: i?.delete,
-            approve: i?.approve,
+            import: i?.import,
+            export: i?.export,
             status: i?.status,
             created_by: req?.user?.id,
-            created_date: date,
+            created_at: date,
           });
         });
       });

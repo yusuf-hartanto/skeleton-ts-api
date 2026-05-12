@@ -55,7 +55,7 @@ export default class Controller {
 
   public async check(req: Request, res: Response) {
     try {
-      const username: string = req?.params?.username;
+      const { username } = req?.params;
       const result: Object | any = await repository.detail({
         username: username,
       });
@@ -225,7 +225,7 @@ export default class Controller {
           area_regencies_id:
             regency_id?.value || check?.getDataValue('area_regencies_id'),
           image_foto: image_foto || check?.getDataValue('image_foto'),
-          modified_by: req?.user?.id,
+          updated_by: req?.user?.id,
         },
         condition: { resource_id: id },
       });
@@ -246,8 +246,8 @@ export default class Controller {
       await repository.update({
         payload: {
           status: 'D',
-          modified_by: req?.user?.id,
-          modified_date: date,
+          updated_by: req?.user?.id,
+          updated_at: date,
         },
         condition: { resource_id: id },
       });

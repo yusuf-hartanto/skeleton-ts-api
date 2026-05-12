@@ -22,6 +22,44 @@ import {
 moment().locale('id');
 const date: string = helper.date();
 const otpExpired: number = 15;
+const loginOtp: boolean = process.env.LOGIN_OTP == 'true';
+
+const generateToken = async (user: any) => {
+  const role = user?.getDataValue('role');
+  const payload: Object = {
+    id: user?.getDataValue('resource_id'),
+    username: user?.getDataValue('username'),
+    province_id: user?.getDataValue('area_province_id'),
+    regency_id: user?.getDataValue('area_regencies_id'),
+    role_name: role?.getDataValue('role_name'),
+  };
+
+  const token: string = helperauth.newToken(payload);
+  const refresh: string = await helperauth.newToken({
+    id: user?.getDataValue('resource_id'),
+  });
+  const getUser: Object = await transformer.detail(user);
+  const totalLogin: Number = user?.getDataValue('total_login') + 1;
+
+  await repository.update({
+    payload: {
+      token: token,
+      token_expired: helper.dateAdd(7, 'days'),
+      total_login: totalLogin,
+    },
+    condition: { resource_id: user?.getDataValue('resource_id') },
+  });
+
+  const data: Object = {
+    userdata: {
+      ...getUser,
+      total_login: totalLogin,
+    },
+    access_token: token,
+    refresh_token: refresh,
+  };
+  return data;
+};
 
 export default class Controller {
   public async login(req: Request, res: Response) {
@@ -30,6 +68,11 @@ export default class Controller {
     const isMatch = await helper.compareIt(req?.body?.password, user?.password);
     if (isMatch) {
       try {
+        if (!loginOtp) {
+          const data = await generateToken(user);
+          return response.success('login success', data, res);
+        }
+
         const date = helper.date();
         const email: string = user?.getDataValue('email');
 
@@ -43,7 +86,7 @@ export default class Controller {
               code: code,
               status: 0,
               expired: expired,
-              modified_date: date,
+              updated_at: date,
             },
             condition: { email: email },
           });
@@ -53,7 +96,7 @@ export default class Controller {
               email: email,
               code: code,
               expired: expired,
-              created_date: date,
+              created_at: date,
             },
           });
         }
@@ -237,7 +280,7 @@ export default class Controller {
       await repository.update({
         payload: {
           confirm_hash: confirm_hash,
-          modified_date: date,
+          updated_at: date,
         },
         condition: { email: email },
       });
@@ -290,7 +333,7 @@ export default class Controller {
       await repository.update({
         payload: {
           password: newPassword,
-          modified_date: date,
+          updated_at: date,
         },
         condition: { confirm_hash },
       });
@@ -339,7 +382,7 @@ export default class Controller {
       await repoOtp.update({
         payload: {
           status: status,
-          modified_date: date,
+          updated_at: date,
         },
         condition: { code: otp },
       });

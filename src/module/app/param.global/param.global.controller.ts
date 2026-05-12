@@ -90,7 +90,7 @@ export default class Controller {
       if (!check) return response.success(NOT_FOUND, null, res, false);
       const data: Object = helper.only(variable.fillable(), req?.body, true);
       await repository.update({
-        payload: { ...data, modified_by: req?.user?.id },
+        payload: { ...data, updated_by: req?.user?.id },
         condition: { id: id },
       });
       return response.success(SUCCESS_UPDATED, null, res);
@@ -111,8 +111,8 @@ export default class Controller {
       await repository.update({
         payload: {
           status: 9,
-          modified_by: req?.user?.id,
-          modified_date: date,
+          updated_by: req?.user?.id,
+          updated_at: date,
         },
         condition: { id: id },
       });

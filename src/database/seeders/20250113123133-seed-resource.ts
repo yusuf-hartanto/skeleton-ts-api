@@ -24,11 +24,8 @@ export const up: Migration = async () => {
   const role = await repoRole.detail({
     role_name: { [Op.like]: `%${ROLE_ADMIN}%` },
   });
-  const province = await repoArea.provinceDetail({
-    name: { [Op.like]: '%JAWA BARAT%' },
-  });
-  const regency = await repoArea.regencyDetail({
-    name: { [Op.like]: '%KABUPATEN BANDUNG%' },
+  const subdistrict = await repoArea.subdistrictDetail({
+    name: { [Op.like]: '%JATIHANDAP%' },
   });
   await Model.bulkCreate([
     {
@@ -43,11 +40,32 @@ export const up: Migration = async () => {
       usia: 1,
       telepon: '085722800025',
       status: 'A',
-      area_province_id: province?.getDataValue('id'),
-      area_regencies_id: regency?.getDataValue('id'),
+      area_province_id: subdistrict?.getDataValue('area_province_id'),
+      area_regencies_id: subdistrict?.getDataValue('area_regencies_id'),
+      area_district_id: subdistrict?.getDataValue('area_district_id'),
+      area_subdistrict_id: subdistrict?.getDataValue('id'),
       created_by: '00000000-0000-0000-0000-000000000000',
     },
-  ]);
+  ], {
+    conflictAttributes: ['username'],
+    updateOnDuplicate: [
+      'role_id',
+      'email',
+      'password',
+      'full_name',
+      'place_of_birth',
+      'date_of_birth',
+      'usia',
+      'telepon',
+      'status',
+      'area_province_id',
+      'area_regencies_id',
+      'area_district_id',
+      'area_subdistrict_id',
+      'created_by',
+      'updated_at'
+    ],
+  });
 };
 
 export const down: Migration = async () => {

@@ -24,6 +24,10 @@ export default class Helper {
     return moment().locale('id').format('YYYY-MM-DD HH:mm:ss');
   }
 
+  public dateFormat(date: string) {
+    return moment(date).locale('id').format('YYYY-MM-DD HH:mm:ss');
+  }
+
   public dateForNumber() {
     return moment().locale('id').format('DDMMYYYY');
   }
@@ -61,12 +65,12 @@ export default class Helper {
     if (isUpdate) {
       result = {
         ...result,
-        modified_date: date,
+        updated_at: date,
       };
     } else {
       result = {
         ...result,
-        created_date: date,
+        created_at: date,
       };
     }
     return result;

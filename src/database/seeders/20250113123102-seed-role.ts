@@ -17,7 +17,7 @@ export const up: Migration = async () => {
   const sequelize = await initializeDatabase(dataConfig?.database);
   initializeModels(sequelize);
 
-  await Model.bulkCreate([
+  const roles = [
     {
       role_id: uuidv4(),
       role_name: ROLE_ADMIN,
@@ -39,7 +39,17 @@ export const up: Migration = async () => {
       restrict_level_area: 0,
       created_by: '00000000-0000-0000-0000-000000000000',
     },
-  ]);
+  ];
+
+  await Model.bulkCreate(roles, {
+    conflictAttributes: ['role_name'],
+    updateOnDuplicate: [
+      'role_name',
+      'area_district_id',
+      'restrict_level_area',
+      'updated_at'
+    ],
+  });
 };
 
 export const down: Migration = async () => {

@@ -4,15 +4,13 @@ import { v4 as uuidv4 } from 'uuid';
 import { DataTypes, Model, Sequelize } from 'sequelize';
 
 export class ParamGlobal extends Model {
-  public id!: string;
-  public param_key!: string;
-  public param_value!: string;
-  public param_desc!: string;
-  public status!: number;
-  public created_by!: string;
-  public created_date!: Date;
-  public modified_by!: string;
-  public modified_date!: Date;
+  declare id: string;
+  declare param_key: string;
+  declare param_value: string;
+  declare param_desc: string;
+  declare status: number;
+  declare created_by: string;
+  declare updated_by: string;
 }
 
 export function initParamGlobal(sequelize: Sequelize) {
@@ -39,22 +37,17 @@ export function initParamGlobal(sequelize: Sequelize) {
       created_by: {
         type: DataTypes.STRING,
       },
-      created_date: {
-        type: DataTypes.DATE,
-        defaultValue: DataTypes.NOW,
-      },
-      modified_by: {
+      updated_by: {
         type: DataTypes.STRING,
-      },
-      modified_date: {
-        type: DataTypes.DATE,
       },
     },
     {
       sequelize,
       modelName: 'ParamGlobal',
       tableName: 'app_param_global',
-      timestamps: false,
+      timestamps: true,
+      createdAt: 'created_at',
+      updatedAt: 'updated_at',
     }
   );
 

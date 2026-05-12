@@ -13,7 +13,7 @@ export default class DataMenu {
         status: 1,
       },
       {
-        id: 2,
+        id: 99,
         menu_name: 'Settings',
         menu_icon: 'tabler-smart-home',
         module_name: '#',
@@ -27,7 +27,7 @@ export default class DataMenu {
   public childmenu() {
     return [
       {
-        parent_id: 2,
+        parent_id: 99,
         menu_name: 'Menu',
         menu_icon: 'Circle',
         module_name: 'master/menu',
@@ -35,7 +35,7 @@ export default class DataMenu {
         status: 1,
       },
       {
-        parent_id: 2,
+        parent_id: 99,
         menu_name: 'Role',
         menu_icon: 'Circle',
         module_name: 'master/role',
@@ -43,7 +43,7 @@ export default class DataMenu {
         status: 1,
       },
       {
-        parent_id: 2,
+        parent_id: 99,
         menu_name: 'User',
         menu_icon: 'Circle',
         module_name: 'master/user',
@@ -51,7 +51,7 @@ export default class DataMenu {
         status: 1,
       },
       {
-        parent_id: 2,
+        parent_id: 99,
         menu_name: 'Param Global',
         menu_icon: 'Circle',
         module_name: 'master/param-global',

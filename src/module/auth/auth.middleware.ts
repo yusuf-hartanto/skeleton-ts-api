@@ -33,7 +33,7 @@ export default class Middleware {
       if (typeof auth == 'string')
         return response.failed('Invalid token', 400, res);
 
-      const id: string = req?.params?.id;
+      const { id } = req?.params;
       if (id && id != undefined) {
         if (!helper.isValidUUID(id))
           return response.failed(`id: ${id} ${INVALID}`, 400, res);
@@ -198,7 +198,7 @@ export default class Middleware {
         const role_menu: any = await repoRoleMenu.detailRole({
           role_name: { [Op.like]: `%${role_name}%` },
         });
-        const ability = role_menu?.dataValues?.role_menu.find((rm: any) => {
+        const ability = role_menu?.getDataValue('role_menu').find((rm: any) => {
           let moduleName: string = rm?.menu?.module_name.toLowerCase();
           if (moduleName.includes('user')) moduleName = 'resource';
           return req?.originalUrl.split('?')[0].includes(moduleName);
